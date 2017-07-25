@@ -1,0 +1,23 @@
+title: Technical Mac Stuff
+google_analytics: UA-972445-5
+
+collections:
+  writeups:
+    output: true
+    permalink: /:collection/:path/
+
+defaults:
+  - scope:
+      path: "" # an empty string here means all files in the project
+      type: writeups
+    values:
+      layout: page
+
+theme: jekyll-theme-dinky
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+
+gems:
+  - jekyll-sitemap
