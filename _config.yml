@@ -1,23 +1,25 @@
-title: Technical Mac Stuff
+theme: jekyll-theme-minimal
+title: Mac Insights
+description: Cogito ad infinitum
 google_analytics: UA-972445-5
-
-collections:
-  writeups:
-    output: true
-    permalink: /:collection/:path/
+lang: en-CA
 
 defaults:
   - scope:
-      path: "" # an empty string here means all files in the project
-      type: writeups
+      type: posts
     values:
-      layout: page
+      category: output
+      permalink: /:categories/:year/:title.html
 
-theme: jekyll-theme-dinky
-
-exclude:
-  - Gemfile
-  - Gemfile.lock
-
-gems:
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
   - jekyll-sitemap
+
+url: "https://ericfromcanada.github.io"
+author: Eric Knibbe
+social:
+  links:
+    - https://twitter.com/EricFromCanada
+    - https://github.com/EricFromCanada
+    - https://bitbucket.org/EricFromCanada
