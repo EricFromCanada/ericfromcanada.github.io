@@ -1,5 +1,5 @@
 ---
-title: Auto-arranging windows on a 2nd display
+title: Auto-arranging windows on a 2nd display with AppleScript
 ---
 
 If you have both a Mac laptop and an external display at your desk, you may know this routine: sit down, plug in the cables, drag each application's windows to your preferred spot on each display, get up for a coffee break, come back and find all your open windows have congregated on a single screen again after your display went to sleep.
