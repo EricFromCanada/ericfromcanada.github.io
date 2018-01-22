@@ -5,6 +5,8 @@ layout: default
 
   {{ content }}
 
+  <p class="rss-subscribe">Subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a>.</p>
+
   <hr>
   <!--h2 class="page-heading">Posts</h2-->
   
@@ -19,7 +21,5 @@ layout: default
       </li>
     {% endfor %}
   </ul>
-
-  <p class="rss-subscribe">Subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a>.</p>
 
 </div>

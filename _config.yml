@@ -9,6 +9,7 @@ defaults:
       type: posts
     values:
       category: output
+      image: /assets/images/logo.png
       permalink: /:categories/:year/:title.html
 
 plugins:
