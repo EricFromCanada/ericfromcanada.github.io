@@ -24,3 +24,9 @@ social:
     - https://twitter.com/EricFromCanada
     - https://github.com/EricFromCanada
     - https://bitbucket.org/EricFromCanada
+
+readme_index:
+  remove_originals: true
+
+optional_front_matter:
+  remove_originals: true
