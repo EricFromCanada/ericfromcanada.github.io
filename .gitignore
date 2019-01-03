@@ -2,5 +2,12 @@ _site/
 .sass-cache/
 .jekyll-metadata
 Gemfile.lock
+
+# in-progress pages
+_drafts*/
+
+# https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
+# General
 .DS_Store
-_drafts/
+.AppleDouble
+.LSOverride
