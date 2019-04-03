@@ -169,23 +169,23 @@ Install [Jenkins 1.609.3](http://archives.jenkins-ci.org/osx-stable/jenkins-1.60
             - check _Set Build Name_ and set to `${ENV,var="FORMULA"}`
                 - click "Advanced…" and uncheck _Set build name after build ends_
         - under _Build_, add an _Execute shell_ build step using this script, which will be run on each node with each job.
-
-                # set PATH so brew command can be found
-                source ~/.bash_profile
-                # check for updates
-                brew update
-                # print the formula's version, which will be added to the build's description
-                echo "[version]" $(brew info $FORMULA | tail -n +1 | head -n 1)
-                # print node's configuration
-                brew --env
-                brew config
-                # download the formula's dependencies and then its sources
-                [[ $(brew deps $FORMULA) ]] && brew fetch --retry --build-from-source $(brew deps $FORMULA)
-                brew fetch --retry --build-from-source $FORMULA
-                # install dependencies and then the formula itself
-                brew install --verbose --only-dependencies $FORMULA
-                brew install --verbose --build-bottle $FORMULA
-
+            ```sh
+            # set PATH so brew command can be found
+            source ~/.bash_profile
+            # check for updates
+            brew update
+            # print the formula's version, which will be added to the build's description
+            echo "[version]" $(brew info $FORMULA | tail -n +1 | head -n 1)
+            # print node's configuration
+            brew --env
+            brew config
+            # download the formula's dependencies and then its sources
+            [[ $(brew deps $FORMULA) ]] && brew fetch --retry --build-from-source $(brew deps $FORMULA)
+            brew fetch --retry --build-from-source $FORMULA
+            # install dependencies and then the formula itself
+            brew install --verbose --only-dependencies $FORMULA
+            brew install --verbose --build-bottle $FORMULA
+            ```
         - under _Build_, add a second build step _Set build description_ and set to `\[version\] (.*)`
 
     Click "Save" when done.
