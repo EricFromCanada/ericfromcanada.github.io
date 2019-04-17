@@ -5,6 +5,11 @@
 
 /* add custom CSS here */
 
+a:hover, a:focus { 
+    background-color: #f8f8f8;
+    color: #555555;
+    font-weight: inherit;
+}
 .wrapper {
   width: 940px;
 }
