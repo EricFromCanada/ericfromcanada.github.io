@@ -52,7 +52,7 @@ For each installation I clicked "Custom Install" in order to skip printer driver
 
 I wrote this [bash script](https://gist.github.com/EricFromCanada/34997fc7cdca00cc35053c79309414f9) to automate the majority of each node's configuration tasks. You can run it directly from the web with:
 
-    bash -c "$(curl -fsSkL https://gist.githubusercontent.com/EricFromCanada/34997fc7cdca00cc35053c79309414f9/raw/80b65fabc5ed1331d610dd33352674ee6bdb0e7c/tigerbrew-node-config.command)"
+    bash -c "$(curl -fsSkL https://gist.githubusercontent.com/EricFromCanada/34997fc7cdca00cc35053c79309414f9/raw/04fe8c8baebf0b303df2beb4941fd75dacd0c11a/tigerbrew-node-config.command)"
 
 Only these two changes had to be done manually, since automating them would require [extra](https://github.com/xfreebird/kcpassword/blob/master/enable_autologin) [tools](https://www.pyehouse.com/cscreen/):
 
