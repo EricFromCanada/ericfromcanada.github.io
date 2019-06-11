@@ -3,7 +3,7 @@ title: Distributed Tigerbrew Formula Testing using Jenkins
 excerpt_separator: <!--more-->
 ---
 
-Mac developers familiar with the [Homebrew](https://brew.sh) binary package manager for macOS may also have heard of [Tigerbrew](https://github.com/mistydemeo/tigerbrew), a fork tailored for PowerPC and and early Intel Macs running Mac OS X 10.4 or 10.5. <!--more-->Despite being computational history by now, they still have a community of their own working to keep them running and useful. As one such member, I've been looking into putting my collection of old Macs to work testing Tigerbrew formulae automatically.
+Mac developers familiar with the [Homebrew](https://brew.sh) binary package manager for macOS may also have heard of [Tigerbrew](https://github.com/mistydemeo/tigerbrew), a fork tailored for PowerPC and early Intel Macs running Mac OS X 10.4 or 10.5. <!--more-->Despite being computational history by now, they still have a community of their own working to keep them running and useful. As one such member, I've been looking into putting my collection of old Macs to work testing Tigerbrew formulae automatically.
 
 ## Overview
 
@@ -14,7 +14,7 @@ Homebrew's original continuous integration (CI) [server farm](https://jenkins.br
 
 Since Homebrew 2.0 now requires at least OS X 10.9 Mavericks, I'll eventually want to test on OS X 10.6–10.8 as well, once Tigerbrew adds support. Being Intel-only, those nodes I'll at least be able to virtualize.
 
-I also have have an early Intel iMac acting as a Jenkins host and node controller. It and each node is plugged into an ethernet switch with an uplink to the router, which has DHCP reservations configured so that each machine gets a consistent and easy-to-type IP address.
+I also have an early Intel iMac acting as a Jenkins host and node controller. It and each node is plugged into an ethernet switch with an uplink to the router, which has DHCP reservations configured so that each machine gets a consistent and easy-to-type IP address.
 
 ## Nodes
 
