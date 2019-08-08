@@ -157,6 +157,9 @@ do
     # Import the p12 file into the keychain
     security import "${PEM_FOLDER}/letsencrypt_sslcert.p12" -f pkcs12 -k /Library/Keychains/System.keychain -P $PASS -T /Applications/Server.app/Contents/ServerRoot/System/Library/CoreServices/ServerManagerDaemon.bundle/Contents/MacOS/servermgrd
 done
+
+# Clean up old certbot log files
+rm -f /var/log/letsencrypt/letsencrypt.log.??
 ```
 
 Make it executable and run it:
@@ -171,7 +174,7 @@ If you now open Server.app and click on "Certificates", you should see your new 
 ## Items of note
 
 - The launchd item uses a full path to _certbot_ because its parent directory, `/usr/local/bin`, is not in the `$PATH` of the environment used by launchd items. (It's possible to modify its environment with the `EnvironmentVariables` key, but this is more concise.)
-- Each invocation of _certbot_ creates a new log file in `/var/log/letsencrypt`. If you want to run the script more often, you may want to clean out older log files regularly.
+- Each invocation of _certbot_ creates a new log file in `/var/log/letsencrypt`, so a new line at the end of the certificate import script above cleans out all but the last ten log files.
 - I haven't tested this with multi-domain or multiple certificates, but I've no reason to believe it wouldn't work as long as appropriate renewal conf file modifications are made.
 - According to its man page, each change to the keychain runs `certupdate` which in turn runs several other helper tools. For this reason it isn't necessary for us to stop and start the web server when a certificate is updated.
 - I ran into [this bug](https://community.letsencrypt.org/t/mac-osx-server-import-le-certificate/5447/31) in OS X 10.11/Server 5.2. The background process responsible for updating `/Library/Server/Web/Config/Proxy/apache_serviceproxy_customsites.conf` whenever a certificate is imported into the keychain adds duplicate entries for each site other than the default defined in the Websites panel. If any of those sites has an SSL variant, entries are created for both the proper and the self-signed certificate, which causes Apache to simply stop working. The only workaround is to manually switch each site's certificate to the self-signed and then back using Server.app upon each renewal. macOS 10.12/Server 5.3 does not appear to have this issue.
