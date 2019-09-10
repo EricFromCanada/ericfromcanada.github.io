@@ -5,16 +5,19 @@
 
 /* add custom CSS here */
 
+// jekyll-theme-minimal
 a:hover, a:focus { 
-    background-color: #f8f8f8;
-    color: #555555;
-    font-weight: inherit;
+  background-color: #f8f8f8;
+  color: #555555;
+  font-weight: inherit;
 }
-.wrapper {
-  width: 940px;
-}
-section {
-  width: 600px;
+@media (min-width: 960px) {
+  .wrapper {
+    width: 940px;
+  }
+  section {
+    width: 600px;
+  }
 }
 ul.post-list {
   list-style-type: none;
@@ -23,10 +26,28 @@ ul.post-list {
 ul.post-list p {
   font-size: 0.8em;
 }
+p, li {
+  line-break: normal;
+}
+code {
+  font-size: 0.93em;
+}
 li>code,
 p code {
   background-color: #f8f8f8;
-  border:1px solid #e5e5e5;
+  border: 1px solid #e5e5e5;
   border-radius: 3px;
   padding: 1px 2px;
+}
+pre>code,
+li>code,
+p code {
+  font-family: Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, Consolas, Liberation Mono, DejaVu Sans Mono, Menlo, Courier New, monospace;
+}
+@media only screen and (max-width : 720px) {
+  body {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
 }

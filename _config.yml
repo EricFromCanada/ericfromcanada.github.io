@@ -17,6 +17,10 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
+github:
+  is_project_page: false
+  is_user_page: true
+
 url: "https://ericfromcanada.github.io"
 author: Eric Knibbe
 social:
