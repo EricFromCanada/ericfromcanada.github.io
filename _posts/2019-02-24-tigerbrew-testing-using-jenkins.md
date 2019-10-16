@@ -50,9 +50,9 @@ For each installation I clicked "Custom Install" in order to skip printer driver
 - To get my public key installed on each node, I ran `ssh-copy-id -i $USER_NAME@$HOST_NAME` for each from my local Mac.
 - I also cloned each completed installation to a partition on another external drive to avoid having to repeat the process should the need arise to reinstall.
 
-I wrote this [bash script](https://gist.github.com/EricFromCanada/34997fc7cdca00cc35053c79309414f9) to automate the majority of each node's configuration tasks. You can run it directly from the web with:
+I wrote this [bash script](https://github.com/EricFromCanada/byte-bucket/blob/master/bash/tigerbrew-node-config.command) to automate the majority of each node's configuration tasks. You can run it directly from the web with:
 
-    bash -c "$(curl -fsSkL https://gist.githubusercontent.com/EricFromCanada/34997fc7cdca00cc35053c79309414f9/raw/04fe8c8baebf0b303df2beb4941fd75dacd0c11a/tigerbrew-node-config.command)"
+    bash -c "$(curl -fsSkL https://raw.githubusercontent.com/EricFromCanada/byte-bucket/master/bash/tigerbrew-node-config.command)"
 
 Only these two changes had to be done manually, since automating them would require [extra](https://github.com/xfreebird/kcpassword/blob/master/enable_autologin) [tools](https://www.pyehouse.com/cscreen/):
 
