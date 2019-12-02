@@ -74,9 +74,12 @@ Instead of relying on macOS to create the disk image for you, you can always jus
     chflags nohidden Library
     rm -rf Library/Caches/*
     mkdir -p .Trash
-    mv Downloads/*.dmg Library/Logs/* \
-        Library/iTunes/i*\ Software\ Updates/* \
+    mv Downloads/*.{dmg,iso} \
+        Library/Application\ Support/iCloud/* \
         Library/Application\ Support/MobileSync/Backup/* \
+        Library/Application\ Support/SyncServices/* \
+        Library/iTunes/i*\ Software\ Updates/* \
+        Library/Logs/* \
         .Trash
     exit
 
