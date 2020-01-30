@@ -10,7 +10,7 @@ But you can do better than that, can't you? You're a hacker, after all.
 
 So went my thought process when I finally tired of going through that click-drag click-drag click-drag routine multiple times per day, eventually resulting in the AppleScript below:
 
-> [arrange windows.applescript](https://bitbucket.org/EricFromCanada/ericfromcanada.bitbucket.org/raw/default/applescript/arrange%20windows.applescript)
+> [arrange windows.applescript](https://github.com/EricFromCanada/byte-bucket/blob/master/applescript/arrange%20windows.applescript)
 
 ## Installation
 
