@@ -1,5 +1,5 @@
 ---
-title: Automatic Renewal of Let’s Encrypt Certificates on macOS Server
+title: Automatic renewal of Let’s Encrypt certificates on macOS Server
 ---
 
 I have a Mac running macOS Server providing several services behind a domain name that I'd like to secure with a certificate from Let's Encrypt, and have it automatically renew. Easy, right?

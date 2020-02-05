@@ -33,11 +33,15 @@ code {
   font-size: 0.93em;
 }
 li>code,
+a>code,
 p code {
   background-color: #f8f8f8;
   border: 1px solid #e5e5e5;
   border-radius: 3px;
   padding: 1px 2px;
+}
+a>code {
+  border-color: #555555;
 }
 pre>code,
 li>code,

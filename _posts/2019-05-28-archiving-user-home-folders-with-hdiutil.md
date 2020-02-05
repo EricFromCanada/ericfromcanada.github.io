@@ -1,5 +1,5 @@
 ---
-title: Archiving User Home Folders with hdiutil
+title: Archiving user home folders with hdiutil
 ---
 
 Today while attempting to use System Preferences to delete a user from a macOS 10.13 system and archive their home folder to a disk image, I ran into this error:

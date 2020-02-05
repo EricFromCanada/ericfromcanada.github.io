@@ -12,7 +12,7 @@ After reading up on [MBR](https://en.wikipedia.org/wiki/Master_boot_record), [GP
 - `gpt`: the FreeBSD tool for GPT disks, shipped with macOS
 - `fdisk`: a much older tool for MBR disks, also shipped with macOS
 - `gdisk`: a newer fdisk-based [tool for GPT disks](http://rodsbooks.com/gdisk/)
-  - installable via [Homebrew](https://brew.sh) with `brew install gptfdisk`
+    - installable via [Homebrew](https://brew.sh) with `brew install gptfdisk`
 
 ## Partition tables, partition tables everywhere
 
@@ -385,7 +385,7 @@ Number  Start (sector)    End (sector)  Size       Code  Name
    4         8773632        12687359   1.9 GiB     0700  FAT
    5        12687360        15656959   1.4 GiB     0700  EXFAT
 ```
-Nothing special here.
+Nothing special here, except to note that this Disk Utility has set each partition's GPT label, which is distinct from its name that shows in Finder and is not set by the new Disk Utility (except for "EFI System Partition").
 
 By the way, I also ran through the above exercises with a 250GB spinning disk without seeing any changes in behaviour.
 

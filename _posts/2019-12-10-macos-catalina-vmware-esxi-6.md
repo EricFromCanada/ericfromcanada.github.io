@@ -29,7 +29,7 @@ Next, create a new VM within VMware ESXi using the .NET client. (I haven't fully
 - Configuration: Custom
 - Name: 10.15 Catalina
 - Virtual Machine Version: 9 (ESXi 5.1 and later)
-  - This is the minimum version required for 10.13 and later, in my experience.
+    - This is the minimum version required for 10.13 and later, in my experience.
 - Guest Operating System: Other > Apple Mac OS X 10.8 (64-bit)
 - CPUs: 2 cores
 - Disk: Do not create a disk

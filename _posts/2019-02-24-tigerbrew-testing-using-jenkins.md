@@ -1,5 +1,5 @@
 ---
-title: Distributed Tigerbrew Formula Testing using Jenkins
+title: Distributed Tigerbrew formula testing using Jenkins
 excerpt_separator: <!--more-->
 ---
 
