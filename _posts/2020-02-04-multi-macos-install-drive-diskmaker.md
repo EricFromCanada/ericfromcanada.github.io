@@ -47,7 +47,7 @@ Using its `createinstallmedia` command also failed:
 $ sudo /Applications/Install\ macOS\ Sierra.app/Contents/Resources/createinstallmedia --volume /Volumes/Untitled --applicationpath /Applications/Install\ macOS\ Sierra.app
 /Volumes/Untitled is not a valid volume mount point.
 ```
-[Reports from others](https://forums.macrumors.com/threads/not-a-valid-volume-mount-point-cant-make-bootable-drive.1935673/) suggested that the issue was with the reissued installer itself, so I pulled the original Sierra installer out of my Time Machine backups and compared the two using FileMerge. The original version is 12.6.03, while the reissued installer is version 12.6.06. It turns out that to get the reissued installer working, all you have to do is open its `Info.plist` file and change the value for `CFBundleShortVersionString` from `12.6.06` to `12.6.03`. This can be done with a single command using `plutil`:
+[Reports from others](https://forums.macrumors.com/threads/not-a-valid-volume-mount-point-cant-make-bootable-drive.1935673/) suggested that the issue was with the reissued installer itself, so I pulled the original Sierra installer out of my Time Machine backups and compared the two using FileMerge. The original's version is 12.6.03, while the reissued installer's version is 12.6.06. It turns out that to get the reissued installer working, all you have to do is open its `Info.plist` file and change the value for `CFBundleShortVersionString` from `12.6.06` to `12.6.03`. This can be done with a single command using `plutil`:
 ```
 sudo plutil -replace CFBundleShortVersionString -string "12.6.03" /Applications/Install\ macOS\ Sierra.app/Contents/Info.plist
 ```
@@ -85,3 +85,7 @@ If you change a boot partition's name in Finder, you might notice that this chan
 Doing so updates the `.disk_label` and (for Retina displays) `.disk_label_2x` files in the partition's `/System/Library/CoreServices/` directory.
 
 It's worth noting that a firmware update that shipped with macOS High Sierra [added `/.IABootFiles`](https://apple.stackexchange.com/a/300954) as a location for those files, but my testing didn't find any cases where that posed an issue.
+
+### Preventing partitions from auto-mounting
+
+Because it can take a while for macOS to properly unmount all the drive's partitions when ejecting, I've prevented them from automatically mounting on my Mac by [adding their UUID values to `/etc/fstab`](https://discussions.apple.com/docs/DOC-7942). Using each partition's Volume UUID from `diskutil info "/Volumes/<volume name>" | grep "Volume UUID"` or System Information's _Hardware > Storage_, I added several lines of `UUID=<UUID> none hfs rw,noauto` to `/etc/fstab` and then ran `sudo automount -vc` to make the edits take effect.
