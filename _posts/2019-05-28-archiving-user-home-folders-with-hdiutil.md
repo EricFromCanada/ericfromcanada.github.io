@@ -30,7 +30,7 @@ And in the Console, I found this under the _writeconfig_ process:
         "suppress-uiagent" = 1;
     })
 
-If you're also seeing this, you already know that the few search results for this particular error have no solutions. But while messing around on my own Mac with `hdiutil create` I saw the same error when using its `-copyuid` flag, even though the command was run with `sudo`:
+If you're also seeing this, you already know that the few search results for this particular error have no solutions. But while messing around on my own Mac with `hdiutil create` I saw the same error when using its `-copyuid` flag, even though the command was run with _sudo_:
 
     $ sudo hdiutil create -verbose -ov -copyuid username -srcfolder /Users/username /Users/Shared/username.dmg
     …
@@ -55,7 +55,7 @@ These commands will find those files or folders, after changing _username_ to su
 
 ## Option 1: Solve the 999 error by repairing permissions
 
-To fix the files with wrong ownership, you can use an [under-documented](https://eclecticlight.co/2017/06/15/something-odd-you-cant-fix-sierra-re-introduces-repairing-permissions/)  `diskutil` command to repair permissions within a specified user's home folder. Since that still won't fix files that have been set to be unreadable by their owner, the next command finds within the user's home folder any files whose owner read bit is unset, and pipes their paths to `xargs` for correction with `chmod`.
+To fix the files with wrong ownership, you can use an [under-documented](https://eclecticlight.co/2017/06/15/something-odd-you-cant-fix-sierra-re-introduces-repairing-permissions/)  _diskutil_ command to repair permissions within a specified user's home folder. Since that still won't fix files that have been set to be unreadable by their owner, the next command finds within the user's home folder any files whose owner read bit is unset, and pipes their paths to _xargs_ for correction with _chmod_.
 
     NAME=username
     diskutil resetUserPermissions / `id -u $NAME`

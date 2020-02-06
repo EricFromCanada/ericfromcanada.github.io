@@ -16,7 +16,7 @@ I have not tried the first option. If you have a Mojave VM already running, it m
 
 ## First attempt using an ISO
 
-Installing macOS to a freshly-created VM within ESXi requires converting the macOS installer application to a bootable ISO file. This procedure is already [well-documented](https://www.geekrar.com/create-macos-catalina-iso-file/) [elsewhere](https://techsviewer.com/how-to-install-macos-10-15-catalina-on-vmware-on-windows-pc/) since Apple [provides](https://support.apple.com/HT201372) a `createinstallmedia` tool within the installer app itself.
+Installing macOS to a freshly-created VM within ESXi requires converting the macOS installer application to a bootable ISO file. This procedure is already [well-documented](https://www.geekrar.com/create-macos-catalina-iso-file/) [elsewhere](https://techsviewer.com/how-to-install-macos-10-15-catalina-on-vmware-on-windows-pc/) since Apple [provides](https://support.apple.com/HT201372) a _createinstallmedia_ tool within the installer app itself.
 
 I had no problems creating an ISO as described, but it refused to finish the boot process when attached to a new VM in ESXi—it would always throw the "unbootable volume" symbol at around the 60% mark—despite working in VMware Fusion. I tested ISOs created from the macOS 10.15.1 (15.1.03) installer under 10.11 and 10.13, but both behaved the same way; the workarounds [described in this post](https://www.jomebrew.com/2019/10/macos-catalina-beta-on-vmwwre-esxi-67-u2.html) seem not to work for ESXi 6.0.
 
@@ -38,12 +38,12 @@ This gives you a VM in need of a disk and a bit of modification.
 
 ### Migrate the disk
 
-To get the virtual disk from Fusion into ESXi, use `scp` to copy the VMDK files from your Mac to the server. (Be sure to enable SSH on your ESXi server, and shut down the source VM first!)
+To get the virtual disk from Fusion into ESXi, use _scp_ to copy the VMDK files from your Mac to the server. (Be sure to enable SSH on your ESXi server, and shut down the source VM first!)
 
     # from Mac to server
     scp -C /path/to/virtual/machine.vmwarevm/Virtual\ Disk.vmdk root@server-ip-address:/tmp
 
-Then SSH into the server and use `vmkfstools` to convert the VMDK to an ESXi-friendly format and a matching filename, located within the VM's directory:
+Then SSH into the server and use _vmkfstools_ to convert the VMDK to an ESXi-friendly format and a matching filename, located within the VM's directory:
 
     # while logged into server
     cd /vmfs/volumes/datastore-name/10.15\ Catalina

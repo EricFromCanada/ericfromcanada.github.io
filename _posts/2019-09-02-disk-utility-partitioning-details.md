@@ -8,15 +8,15 @@ After reading up on [MBR](https://en.wikipedia.org/wiki/Master_boot_record), [GP
 
 - Disk Utility: the "new" version, as shipped with each version of OS X/macOS
 - Disk Utility: the "original" (or "good") version, [patched](https://justus.berlin/2015/10/restore-old-disk-utility-in-os-x-el-capitan/) so it'll still run on OS X 10.11
-- `diskutil`: Apple's official disk management tool
-- `gpt`: the FreeBSD tool for GPT disks, shipped with macOS
-- `fdisk`: a much older tool for MBR disks, also shipped with macOS
-- `gdisk`: a newer fdisk-based [tool for GPT disks](http://rodsbooks.com/gdisk/)
+- _diskutil_: Apple's official disk management tool
+- _gpt_: the FreeBSD tool for GPT disks, shipped with macOS
+- _fdisk_: a much older tool for MBR disks, also shipped with macOS
+- _gdisk_: a newer fdisk-based [tool for GPT disks](http://rodsbooks.com/gdisk/)
     - installable via [Homebrew](https://brew.sh) with `brew install gptfdisk`
 
 ## Partition tables, partition tables everywhere
 
-For reference, my internal HFS+ drive according to `diskutil`:
+For reference, my internal HFS+ drive according to _diskutil_:
 ```
 $ diskutil list
 /dev/disk0 (internal, physical):
@@ -34,7 +34,7 @@ $ diskutil list
 ```
 Here we clearly see the internal drive is GPT with a 200MB EFI system partition (ESP), a Core Storage partition containing the boot volume, and a recovery partition. (Run `diskutil cs list` for a better view of how Core Storage volumes are structured.)
 
-The same drive according to `gpt`:
+The same drive according to _gpt_:
 ```
 $ sudo gpt show /dev/disk0
        start        size  index  contents
@@ -49,7 +49,7 @@ $ sudo gpt show /dev/disk0
   1954210087          32         Sec GPT table
   1954210119           1         Sec GPT header
 ```
-The `gpt` tool shows everything, and counts according to 512-byte sectors. The [protective MBR](https://en.wikipedia.org/wiki/GUID_Partition_Table#MBR_variants) occupies one 512-byte sector, the GPT header occupies the next sector, and the partition table entries follow. Then at sector 34 there's a 3KB gap so that the first partition starts on a 4KB boundary (i.e. 20KB from the start of the disk). The ESP is _409600 sectors * 512 bytes per sector / 1024 bytes per KB / 1024 KB per MB_ = 200MB. Then our remaining partitions, another boundary alignment gap, and the secondary GPT table and header.
+The _gpt_ tool shows everything, and counts according to 512-byte sectors. The [protective MBR](https://en.wikipedia.org/wiki/GUID_Partition_Table#MBR_variants) occupies one 512-byte sector, the GPT header occupies the next sector, and the partition table entries follow. Then at sector 34 there's a 3KB gap so that the first partition starts on a 4KB boundary (i.e. 20KB from the start of the disk). The ESP is _409600 sectors * 512 bytes per sector / 1024 bytes per KB / 1024 KB per MB_ = 200MB. Then our remaining partitions, another boundary alignment gap, and the secondary GPT table and header.
 
 This follows the behaviour described in [Secrets of the GPT](https://developer.apple.com/library/archive/technotes/tn2166/_index.html#//apple_ref/doc/uid/DTS10003927). If you've read that and are wondering why there are no 128MB gaps after each non-ESP partition, note the article doesn't mention that those gaps are only added after HFS+ partitions when defined directly within the partition table, and not when encapsulated within a [Core Storage](https://en.wikipedia.org/wiki/Core_Storage) logical volume group.
 
@@ -100,7 +100,7 @@ gpt show: /dev/disk2: Suspicious MBR at sector 0
 ```
 ...a just-under 1MB gap _before_ the FAT volume, but not after. This is OS X following Windows' practice of aligning partitions it creates on [1MB boundaries](https://www.thomas-krenn.com/en/wiki/Partition_Alignment#Windows) for disks over 4GB, which translates to the location of the partition's first sector (411648) being divisible by 2048. (Note that OS X does this for all disk sizes rather than on 64KB/128 sector boundaries for smaller disks, as Windows does.)
 
-As for that "suspicious MBR", we can use `fdisk` to read its master boot record partition table:
+As for that "suspicious MBR", we can use _fdisk_ to read its master boot record partition table:
 ```
 $ sudo fdisk /dev/disk2
 Disk: /dev/disk2	geometry: 974/255/63 [15659008 sectors]
@@ -119,7 +119,7 @@ Aha: the presence of a FAT partition made Disk Utility create a [hybrid MBR](htt
 - #2 is the FAT (0B) partition
 - #3 is the HFS+ (AF) partition
 
-As the linked article explains, hybrid MBRs can be a dangerous hack, and Windows XP can't actually mount this disk as-is unless the hybrid MBR table is reordered with `gdisk` to list any mountable partitions _before_ the EE partition. (Otherwise you'll be told "this partition is not enabled" when assigning a drive letter in Disk Management, and reformatting what shows in My Computer will wipe out the primary GPT structures and the ESP in favour of a 200MB FAT volume!)
+As the linked article explains, hybrid MBRs can be a dangerous hack, and Windows XP can't actually mount this disk as-is unless the hybrid MBR table is reordered with _gdisk_ to list any mountable partitions _before_ the EE partition. (Otherwise you'll be told "this partition is not enabled" when assigning a drive letter in Disk Management, and reformatting what shows in My Computer will wipe out the primary GPT structures and the ESP in favour of a 200MB FAT volume!)
 
 The protective MBR that Disk Utility usually creates on disks (meant to actively deter non-GPT-aware disk utilities from thinking the disk is unformatted) looks like this:
 ```
@@ -189,13 +189,13 @@ $ diskutil list /dev/disk2
 ```
 Note that:
 
-- `diskutil` refers to MBR as `FDisk_partition_scheme`
+- _diskutil_ refers to MBR as `FDisk_partition_scheme`
 - both standard and case-sensitive HFS+ are `Apple_HFS`
 - FAT is marked as `DOS_FAT_32` (so presumably it's not FAT12 or FAT16)
 - ExFAT is marked as `Windows_NTFS` (what???)
-- all four partitions were supposed to be 2GB, but the last got shorted by a few hundred MB because of the 128MB trailing gap for each HFS+ partition, which `diskutil` includes in their total sizes
+- all four partitions were supposed to be 2GB, but the last got shorted by a few hundred MB because of the 128MB trailing gap for each HFS+ partition, which _diskutil_ includes in their total sizes
 
-Where is `diskutil` getting the partition type info? Presumably from the MBR [partition type IDs](https://en.wikipedia.org/wiki/Partition_type). Can we see those directly?
+Where is _diskutil_ getting the partition type info? Presumably from the MBR [partition type IDs](https://en.wikipedia.org/wiki/Partition_type). Can we see those directly?
 ```
 $ sudo gpt show /dev/disk2
      start      size  index  contents
@@ -208,14 +208,14 @@ $ sudo gpt show /dev/disk2
    8353796   3914752      3  MBR part 11
   12268548   3390460      4  MBR part 5
 ```
-Neat, `gpt` can read MBR tables. And it does show partition IDs, but in decimal for some reason.
+Neat, _gpt_ can read MBR tables. And it does show partition IDs, but in decimal for some reason.
 
 - first sector is the MBR
 - second sector is the (unlabelled) [EBR](https://en.wikipedia.org/wiki/Extended_boot_record) which points to the final partition (see below)
 - then our HFS+ and case-sensitive HFS+ partitions with just a 1-sector boundary after each, because 128MB gaps are only added on GPT disks (175 == 0xAF)
 - then our FAT/ExFAT partitions (11 == 0x0B)
 
-To see both the MBR and EBR contents, use `fdisk`:
+To see both the MBR and EBR contents, use _fdisk_:
 ```
 $ sudo fdisk /dev/disk2
 Disk: /dev/disk2	geometry: 974/255/63 [15659008 sectors]
@@ -244,9 +244,9 @@ This lets us see the actual hex value [partition type IDs](https://en.wikipedia.
 
 And then in the extended partition table:
 
-- 07 is ambiguous — it could be IFS, HPFS, NTFS, ExFAT, or old QNX. And now we know why `diskutil` just shows the last partition as `Windows_NTFS`, because it can't tell which it actually is without reading the partition's data itself.
+- 07 is ambiguous — it could be IFS, HPFS, NTFS, ExFAT, or old QNX. And now we know why _diskutil_ just shows the last partition as `Windows_NTFS`, because it can't tell which it actually is without reading the partition's data itself.
 
-What does `gdisk` say?
+What does _gdisk_ say?
 ```
 $ sudo gdisk /dev/disk2
 GPT fdisk (gdisk) version 1.0.4
@@ -290,7 +290,7 @@ Number  Start (sector)    End (sector)  Size       Code  Name
    3         8353796        12268547   1.9 GiB     0700  Microsoft basic data
    5        12268549        15659007   1.6 GiB     0700  Microsoft basic data
 ```
-What a weird message. Is it detecting an old secondary GPT table at the end of the disk, making it think it should still be GPT? This would cause it to think there's partition overlap even though the disk isn't GPT at all. And the last two partitions are labelled the same because `gdisk` is translating the MBR type IDs to their [GPT equivalents](https://en.wikipedia.org/wiki/Microsoft_basic_data_partition), which are the same for FAT and ExFAT.
+What a weird message. Is it detecting an old secondary GPT table at the end of the disk, making it think it should still be GPT? This would cause it to think there's partition overlap even though the disk isn't GPT at all. And the last two partitions are labelled the same because _gdisk_ is translating the MBR type IDs to their [GPT equivalents](https://en.wikipedia.org/wiki/Microsoft_basic_data_partition), which are the same for FAT and ExFAT.
 
 ## Once more time, with GPT
 
