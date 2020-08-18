@@ -138,10 +138,8 @@ Insert the following code:
 
 [ $EUID -ne 0 ] && echo "Must be run as root." && exit 1
 
-# Ensure nothing happens if /etc/letsencrypt/live is empty
-shopt -s nullglob
-
-for PEM_FOLDER in /etc/letsencrypt/live/*
+# Loop through subdirectories of /etc/letsencrypt/live
+find /etc/letsencrypt/live -type d -maxdepth 1 -mindepth 1 | while read PEM_FOLDER
 do
     DOMAIN=$(basename $PEM_FOLDER)
 
