@@ -2,9 +2,9 @@
 title: Migrating Time Machine backups from local disk to network
 ---
 
-In wanting to move my Time Machine backups to a network drive without losing any history, I set to looking up what methods others had used and what quirks to watch out for. Backups made by Time Machine to a local disk are simply stored in a `Backups.backupdb` folder on the disk, while backups to a network drive are stored in said folder within a sparsebundle disk image, since Time Machine relies on specific features of HFS+ or APFS.
+In wanting to move my Time Machine backups to a network drive without losing any history, I set to looking up what methods others had used and what quirks to watch out for.
 
-The main problem is that there's no official way to preserve your existing backups when making [this type of destination switch](https://web.archive.org/web/20210226200806/https://support.apple.com/en-ca/HT202380), so we need to improvise — and it quickly became apparent that many of the [suggestions](https://apple.stackexchange.com/q/35149) on [how to do so](https://apple.stackexchange.com/q/104277) are either outdated or don't fully understand the situation.
+Backups made by Time Machine to a local disk are simply stored in a `Backups.backupdb` folder on the disk, while backups to a network drive are stored in said folder within a sparsebundle disk image, since Time Machine relies on specific features of HFS+ or APFS. The main problem is that there's no official way to preserve your existing backups when making [this type of destination switch](https://web.archive.org/web/20210226200806/https://support.apple.com/en-ca/HT202380), so we need to improvise — and it quickly became apparent that many of the [suggestions](https://apple.stackexchange.com/q/35149) on [how to do so](https://apple.stackexchange.com/q/104277) are either outdated or don't fully understand the situation.
 
 ## HFS+ backups (macOS 10.x)
 
@@ -104,4 +104,6 @@ This is what I ended up doing, and although the copy took about 54 hours to copy
 
 ## APFS backups (macOS 11+)
 
-I haven't tested this yet, but until then, much has [been](https://eclecticlight.co/2020/06/29/apfs-changes-in-big-sur-how-time-machine-backs-up-to-apfs-and-more/) [written](https://eclecticlight.co/2021/04/16/time-machine-to-apfs-using-a-network-share/) on using Time Machine with APFS.
+The bad news is that because new Time Machine backup sets since macOS Big Sur rely on [APFS snapshots](https://eclecticlight.co/2020/06/29/apfs-changes-in-big-sur-how-time-machine-backs-up-to-apfs-and-more/), it's [not currently possible](https://eclecticlight.co/2021/03/24/the-trouble-with-snapshots-how-can-you-copy-them/) to clone drives containing them. Using the Finder to drag a Time Machine snapshot from one drive to another gives the "disallow" cursor, `asr` and other utilities make no mention of cloning snapshot data, and attempting a restore with Disk Utility fails with "Error finding volume with appropriate role in container". As for SuperDuper! v3.5, it will clone a Time Machine drive to a disk image, but the resulting volume will still appear empty, even though it takes up equivalent space.
+
+The good news is that [_Time-Machine-NASifier.command_](https://github.com/EricFromCanada/byte-bucket/blob/master/bash/Time-Machine-NASifier.command) still works for creating a disk image with a larger band size than the [default 64MB](https://eclecticlight.co/2021/04/16/time-machine-to-apfs-using-a-network-share/). When run on macOS 11 or later, it'll automatically create a case-sensitive APFS disk image instead.
