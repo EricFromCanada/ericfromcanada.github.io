@@ -53,7 +53,7 @@ sudo plutil -replace CFBundleShortVersionString -string "12.6.03" /Applications/
 ```
 after which DiskMaker X should run without issue.
 
-Evidently, something within the reissued installer wasn't updated to account for the new version number. As of this writing, [this Apple support page](https://support.apple.com/en-us/HT208202) is still serving the affected installer from [this URL](http://updates-http.cdn-apple.com/2019/cert/061-39476-20191023-48f365f4-0015-4c41-9f44-39d3d2aca067/InstallOS.dmg). I've used their feedback form to raise the issue with a link back to this post.
+Evidently, something within the reissued installer wasn't updated to account for the new version number. As of this writing, [this Apple support page](https://support.apple.com/en-us/HT208202) is still serving the affected installer from [this URL](http://updates-http.cdn-apple.com/2019/cert/061-39476-20191023-48f365f4-0015-4c41-9f44-39d3d2aca067/InstallOS.dmg). I've used their feedback form to raise the issue with a link back to this post. (**Update 2022-03:** Looking at this [Apple support article](https://support.apple.com/en-us/HT201372), it appears they've fixed the problem the Apple Way™ by removing all references to the Sierra installer.)
 
 ### Custom icons in Startup Manager
 
