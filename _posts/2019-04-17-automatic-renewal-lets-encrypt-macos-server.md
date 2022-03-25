@@ -149,16 +149,21 @@ do
     # Transform the pem files into a p12 file
     openssl pkcs12 -export -inkey "${PEM_FOLDER}/privkey.pem" -in "${PEM_FOLDER}/cert.pem" -certfile "${PEM_FOLDER}/fullchain.pem" -out "${PEM_FOLDER}/letsencrypt_sslcert.p12" -passout pass:$PASS
 
-    # Delete the current certificate from the keychain
-    security delete-certificate -Z $(security find-identity -v -p ssl-server -s ${DOMAIN} | grep "1)" | cut -d " " -f 4) -t /Library/Keychains/System.keychain
-
     # Import the p12 file into the keychain
     security import "${PEM_FOLDER}/letsencrypt_sslcert.p12" -f pkcs12 -k /Library/Keychains/System.keychain -P $PASS -T /Applications/Server.app/Contents/ServerRoot/System/Library/CoreServices/ServerManagerDaemon.bundle/Contents/MacOS/servermgrd
+
+    # Delete the older certificate from the keychain
+    security delete-certificate -Z $(security find-identity -v -p ssl-server -s ${DOMAIN} | grep "1)" | cut -d " " -f 4) -t /Library/Keychains/System.keychain
 done
+
+# Restart web server so it uses the new certificates
+launchctl kickstart -k system/com.apple.serviceproxy
 
 # Clean up old certbot log files
 rm -f /var/log/letsencrypt/letsencrypt.log.??
 ```
+
+> **Update 2022-03:** Based on feedback, reordered logic and added a restart of the web server to ensure the new certificate completely replaces the old.
 
 Make it executable and run it:
 
