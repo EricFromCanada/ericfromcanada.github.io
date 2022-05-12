@@ -153,7 +153,7 @@ do
     security import "${PEM_FOLDER}/letsencrypt_sslcert.p12" -f pkcs12 -k /Library/Keychains/System.keychain -P $PASS -T /Applications/Server.app/Contents/ServerRoot/System/Library/CoreServices/ServerManagerDaemon.bundle/Contents/MacOS/servermgrd
 
     # Delete the older certificate from the keychain
-    security delete-certificate -Z $(security find-identity -v -p ssl-server -s ${DOMAIN} | grep "1)" | cut -d " " -f 4) -t /Library/Keychains/System.keychain
+    security delete-identity -Z $(security find-identity -v -p ssl-server -s ${DOMAIN} | grep "1)" | cut -d " " -f 4) /Library/Keychains/System.keychain
 done
 
 # Restart web server so it uses the new certificates
