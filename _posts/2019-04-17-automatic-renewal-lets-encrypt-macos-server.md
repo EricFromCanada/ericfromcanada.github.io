@@ -80,14 +80,24 @@ Insert the following content:
         <key>RunAtLoad</key>
         <true/>
         <key>StartCalendarInterval</key>
-        <dict>
-            <key>Weekday</key>
-            <integer>1</integer>
-            <key>Hour</key>
-            <integer>3</integer>
-            <key>Minute</key>
-            <integer>1</integer>
-        </dict>
+        <array>
+            <dict>
+                <key>Weekday</key>
+                <integer>1</integer>
+                <key>Hour</key>
+                <integer>3</integer>
+                <key>Minute</key>
+                <integer>1</integer>
+            </dict>
+            <dict>
+                <key>Weekday</key>
+                <integer>4</integer>
+                <key>Hour</key>
+                <integer>3</integer>
+                <key>Minute</key>
+                <integer>1</integer>
+            </dict>
+        </array>
         <key>ProgramArguments</key>
         <array>
             <string>/usr/local/bin/certbot</string>
@@ -102,7 +112,7 @@ Save and close the file, then load the new item into launchd:
 
     sudo launchctl load -w /Library/LaunchDaemons/local.certbot.renew.plist
 
-Your Mac will now run `/usr/local/bin/certbot renew --quiet` each Monday at 3:01.
+Your Mac will now run `/usr/local/bin/certbot renew --quiet` each Monday and Thursday at 3:01.
 
 ### Checking the output
 
