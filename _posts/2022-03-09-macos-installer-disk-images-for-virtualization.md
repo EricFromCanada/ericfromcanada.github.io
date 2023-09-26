@@ -8,6 +8,8 @@ A search for how to convert macOS installers to disk images reveals that there a
 
 So, I set out to assemble the collected wisdom on the topic into a relatively comprehensible bash script that, given the path to any macOS installer application from OS X Lion to macOS 12 and beyond, generates a bootable ISO in the current directory. This post explains what it's doing and why.
 
+**Update 2023-09:** Changes on Apple's end require the use of `createinstallmedia` for all macOS installers since 10.13 High Sierra. See the [next post]({% post_url 2023-09-26-recovery-server-could-not-be-contacted-installing-macos %}) for why.
+
 ## Running the script
 
 Download the script from here:
@@ -18,7 +20,7 @@ Run it with:
 
     bash Mac-Installer-Imageizer.sh path-to-installer.app
 
-Note that it'll ask for your password when processing installers for macOS 11 and up.
+Note that it'll ask for your password when processing installers for macOS 10.13 and up.
 
 ### Commentary
 
@@ -34,7 +36,7 @@ Unless this value is set to "iso", the script saves in UDZO format, which can sh
 
 The script requires a path to a macOS / OS X installer application. Originally I'd wanted it to prompt for the path interactively, but it wasn't dealing with the escaped spaces that Terminal automatically inserts when you drag a file into the window from the Finder without needless additional complexity.
 
-After saving the value of the passed installer path (which uses [substring removal](https://wiki.bash-hackers.org/syntax/pe#substring_removal) to trim a possible trailing slash), it proceeds only if it can locate the InstallESD.dmg or SharedSupport.dmg file, which is in the same location on all macOS installer versions. The presence of SharedSupport.dmg indicates a macOS 11 or greater installer, which necessitates the use of `createinstallmedia` and `sudo`, so it asks for the user's password in advance.
+After saving the value of the passed installer path (which uses [substring removal](https://wiki.bash-hackers.org/syntax/pe#substring_removal) to trim a possible trailing slash), it proceeds only if it can locate the InstallESD.dmg or SharedSupport.dmg file, which is in the same location on all macOS installer versions. The presence of BaseSystem.dmg indicates a macOS 10.13–10.15 installer and SharedSupport.dmg indicates a macOS or 11 or greater installer, either of which necessitate the use of `createinstallmedia` and `sudo`, so it asks for the user's password in advance.
 
 #### grab OS name from the installer app filename
 
@@ -56,21 +58,21 @@ Rather than passing `-attach` to the previous command, mounting the newly-create
 - `-nobrowse` prevents the mounted volume from showing up in the Finder, which isn't required but can help avoid mishaps
 - `-mountpoint` lets the script specify a path at which to mount the image, allowing for hardcoded paths later on — note that this doesn't change the volume name that the Finder would display (if not for the previous flag)
 
-#### for macOS 11+, run `createinstallmedia`
+#### for macOS 10.13+, run `createinstallmedia`
 
-The installer for macOS Big Sur has a drastically different internal structure than those that came before it. Unless someone else does the dirty work of reverse engineering it, this script defers to its built-in `createinstallmedia` command.
+The installer for macOS Big Sur has a drastically different internal structure than those that came before it. Unless someone else does the dirty work of reverse engineering it, this script defers to its built-in `createinstallmedia` command. It now does the same for macOS 10.13–10.15 because of [changes on Apple's end]({% post_url 2023-09-26-recovery-server-could-not-be-contacted-installing-macos %}).
 
-Note that if you have `USE_CREATEINSTALLMEDIA=1` already set in your shell environment, it'll attempt to use `createinstallmedia` for other macOS versions as well. It'll only work for 10.13 and later since it omits the `--applicationpath` argument, which was simpler than attempting to deal with a potentially [bugged 10.12 Sierra installer]({% post_url 2020-02-04-multi-macos-install-drive-diskmaker %}).
+Although an earlier version of the `createinstallmedia` command shipped with older installers, this script won't attempt to use it in those cases because it omits the then-required `--applicationpath` argument, which was simpler than attempting to deal with a potentially [bugged 10.12 Sierra installer]({% post_url 2020-02-04-multi-macos-install-drive-diskmaker %}).
 
 #### restore boot disk image to destination disk image
 
 Installers for macOS 10.x are processed according to their three varieties:
 
 - 10.7–10.8: InstallESD.dmg is all that's required
-- 10.9–10.11: BaseSystem.dmg, found within InstallESD.dmg, is the starting point
-- 10.12–10.15: BaseSystem.dmg is now in the same directory as InstallESD.dmg
+- 10.9–10.12: InstallESD.dmg contains BaseSystem.dmg, which is the starting point
+- ~~10.13–10.15: BaseSystem.dmg is now in the same directory as InstallESD.dmg~~
 
-In each case, `asr` does a block copy of the given disk image to the destination mount point. The colon at the end of the last case avoids a potential error noted in [prepare-iso.sh](https://github.com/geerlingguy/macos-virtualbox-vm/blob/master/prepare-iso.sh#L78). When done, `asr` always remounts the destination disk image, so `sleep 2` gives the system a moment to notice the new volume before proceeding.
+In each case, `asr` does a block copy of the given disk image to the destination mount point. ~~The colon at the end of the last case avoids a potential error noted in [prepare-iso.sh](https://github.com/geerlingguy/macos-virtualbox-vm/blob/master/prepare-iso.sh#L78).~~ When done, `asr` always remounts the destination disk image, so `sleep 2` gives the system a moment to notice the new volume before proceeding.
 
 #### remount restored disk image with original mount point
 
@@ -78,13 +80,13 @@ Because `asr` does a block copy, the destination disk image's volume assumes the
 
 #### grab full OS version
 
-Since it's helpful to know precisely which version of macOS will be installed by the resulting disk image, the script fetches it from SystemVersion.plist for inclusion in the final filename.
+Since it's helpful to know precisely which version of macOS will be installed by the resulting disk image, the script fetches it from the installer for inclusion in the final filename. For 10.7–10.12 this actually fetches the version of the installer's OS rather than what gets installed, which is usually the same, but might not be for some early versions.
 
 #### replace Packages link with actual files
 
 For 10.9–10.12, BaseSystem.dmg contains a "Packages" symlink that needs to be replaced with a proper folder for the installer to work when booted. Since `ditto` can't replace a symlink on its own, `rm` removes it and `rsync` copies the data, skipping some firmware updates that won't be used when creating VMs. (Later versions embed firmware updates in a .pkg and can't be so easily omitted.)
 
-Strangely, 10.13–10.15 require the linked folder's contents to instead be copied to the same directory as the symlink, which can be done by `ditto`.
+~~Strangely, 10.13–10.15 require the linked folder's contents to instead be copied to the same directory as the symlink, which can be done by `ditto`.~~
 
 #### copy installer dependencies
 
