@@ -25,9 +25,8 @@ url: "https://ericfromcanada.github.io"
 author: Eric Knibbe
 social:
   links:
-    - https://twitter.com/EricFromCanada
     - https://github.com/EricFromCanada
-    - https://bitbucket.org/EricFromCanada
+    - https://techhub.social/@EricFromCanada
 
 readme_index:
   remove_originals: true
