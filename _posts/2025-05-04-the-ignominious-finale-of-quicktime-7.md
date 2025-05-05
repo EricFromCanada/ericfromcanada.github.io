@@ -6,14 +6,14 @@ It started with a seemingly simple question: "Which version of QuickTime should 
 
 Quick recap: back in the early days of Mac OS X, when dinosaurs like the WMV format still roamed the internet and H.264 had not yet completely taken over, QuickTime was a separate component within OS X that, like iTunes and Java, had its own update cadence apart from regular OS updates. Upon the release of Mac OS X 10.6 Snow Leopard and its deprecation in favour of QuickTime X, its updates were rolled into those for the OS while support for previous OS X versions and Windows were eventually dropped.
 
-The obvious answer would be "the latest version". According to these documentation pages that are still online (and [this 2017 snapshot](https://web.archive.org/web/20170702062047/https://support.apple.com/en_US/downloads/quicktime)), the latest for each platform is:
+The obvious answer would be "the latest version". According to these documentation pages that are still online, the latest for each platform is:
 
 - [QuickTime 7.6.4 for Tiger and Leopard](https://support.apple.com/en-us/docs/software/pl171)
 - [QuickTime 7.7.9 for Windows](https://support.apple.com/en-us/docs/software/pl170)
 
 But digging into the [history of QuickTime 7 releases](https://en.wikipedia.org/wiki/QuickTime#QuickTime_7.x) shows that 7.6.6, 7.6.9, and 7.7 were released for Mac OS X Leopard. Also, no QuickTime updates are shown in Software Update on Leopard; unless they're installed manually, it'll stay at 7.2.1. So what happened?
 
-From what I've found, the 7.7 release had some nasty bugs that affected pro users in particular. Although Apple did eventually release a stealth update to 7.7 by uploading an updated installer with the same version number to their support site, its only difference was a newer installer certificate that expired in 2019 instead of 2012 (a mere eight months after the original installer's release). Apple never officially acknowledged the issue and simply removed versions after 7.6.4 from their support site's search results.
+From what I've found, the 7.7 release had some nasty bugs that affected pro users in particular. Although Apple did eventually release a "stealth" (unannounced) update to 7.7 by uploading an updated installer with the same version number to their support site, its only difference was a newer installer certificate that expired in 2019 instead of 2012 (a mere eight months after the original installer's release). Apple never officially acknowledged the issue and simply removed versions after 7.6.4 from their [support site's search results](https://web.archive.org/web/20170702062047/https://support.apple.com/en_US/downloads/quicktime).
 
 Here's a timeline:
 - 2010-12-07: QuickTime 7.6.9 is released.
